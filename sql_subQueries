@@ -1,0 +1,46 @@
+/* Subqueries are a great way to extend your SQL capabilities and they come in many formats.
+
+Eg: Using a Subquery to create a reference dataset from a single location to fFind every subscriber who has opened any email.*/
+
+Select
+Subscriberkey
+from
+_Subscribers
+Where
+SubscriberKey in (select Subscriberkey from _Open)
+
+/* You can create Subqueries within your Subqueries to get a single output for a specific set of requirements.
+Eg: Using a nested Subquery to finding all Subscribers who have Opened an email of a specific Email Name format  */
+
+Select
+Subscriberkey
+from
+_Subscribers
+where
+Subscriberkey in (select Subscriberkey from _Open
+                  where
+                  JobID in (Select JobId from _Job
+                            where emailname like '%PromoCampaign%')
+                  )
+                  
+/* You can use Subqueries if you need to calculate or derive something to use within your main query, it can save you needing to maintain an additional query and you can join your subquery in to your original query
+
+Level 3 - Finding how many times a person has opened and the first time someone opened an email of the PromoCampaign type with one query rather than 3 */
+
+select
+sub.SubscriberKey
+,tot.totalopens
+,fir.firstopen
+from
+_subscribers sub
+join (select subscriberkey, count(*) as 'TotalOpens' from _Open
+      where
+      JobID in (select JobId from _Job
+                where emailname like '%PromoCampaign%')
+      group by subscriberkey ) tot on sub.subscriberkey = tot.subscriberkey
+join (select subscriberkey, min(eventdate) as 'FirstOpen' from _open
+      where
+      Jobid in (select JobId from _Job
+                where emailname like '%PromoCampaign%')
+     group by subscriberkey ) fir on sub.subscriberkey = fir.subscriberkey
+                  
