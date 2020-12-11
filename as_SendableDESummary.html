@@ -1,0 +1,40 @@
+<h1>
+  Sendable Data Extension - Summary
+</h1>
+<table>
+<thead>
+  <tr>
+    <th>DE Name</th>
+    <th>Description</th>
+    <th>Rowcount</th>
+  </tr>
+</thead>
+%%[
+SET @GetSendableDEs = CreateObject('RetrieveRequest')
+SetObjectProperty(@GetSendableDEs, "ObjectType", "DataExtension")
+SET @SimpleFilter = CreateObject("SimpleFilterPart")
+SetObjectProperty(@SimpleFilter, "Property", "IsSendable")
+SetObjectProperty(@SimpleFilter, "SimpleOperator", "Equals")
+AddObjectArrayItem(@SimpleFilter, "Value", "True")
+AddObjectArrayItem(@GetSendableDEs,"Properties","Name")
+AddObjectArrayItem(@GetSendableDEs,"Properties","Description")
+SetObjectProperty(@GetSendableDEs, "Filter", @SimpleFilter)
+SET @DERows = InvokeRetrieve(@GetSendableDEs,@status,@reqID) 
+SET @DECount = ROWCOUNT(@DERows)
+
+IF @DECount > 0 THEN
+FOR @Loop = 1 to @DECount DO
+
+SET @DERow = ROW(@DERows,@Loop)
+SET @DEName = FIELD(@DERow,'Name')
+SET @DEKey = FIELD(@DERow,'CustomerKey')
+SET @DEDesc = FIELD(@DERow,'Description')
+SET @DERowcount = DataExtensionRowCount(@DEName)
+]%%
+  <tr>
+    <td>%%=V(@DEName)=%%</td>
+    <td>%%=V(@DEDesc)=%%</td>
+    <td>%%=V(@DERowcount)=%%</td>
+  </tr>
+%%[ NEXT @Loop ELSE ENDIF ]%%
+</table>
