@@ -1,0 +1,14 @@
+/* Ever struggled to Dedupe on a single or multiple attributes?
+
+Try using a partitioning window in your SQL Query and you can choose 
+not just what you want to dedupe your data on, but what priority you
+wish to dedupe against. Want to pick the first SubscriberKey that for
+an email address and a status from _Subscribers, try this */
+
+select top 1 with ties
+subscriberkey
+,status
+,DateJoined
+from
+_Subscribers
+order by row_number() over (partition by emailaddress, status order by DateJoined asc)
