@@ -1,0 +1,9 @@
+%%[
+SET @deRows = LookupRows(...)
+
+FOR @i = 1 TO RowCount(@deRows) DO
+  SET @row = Row(@deRows,@i)
+  SET @tempValue = Field(@Row,'Field')
+  SET @FieldSet = TreatAsContent(CONCAT('%','%[SET @Field', @i, ' = @tempValue]%', '%'))
+NEXT @i 
+]%%

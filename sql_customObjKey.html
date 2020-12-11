@@ -1,0 +1,23 @@
+/* 
+Avoid time outs by breaking large volume DEs down
+by targeting the _customObjectKey attribute on the DE.
+
+This attribute indexes at 0. 
+The below example breaks the DE in two. 
+
+First half of the DE -- Query 1: 
+*/ 
+
+SELECT a.EmailAddress
+, a.SubscriberKey
+, a.Status
+FROM DataExtension a
+WHERE _customObjectKey % 1 = 0
+
+
+/* Second half of the DE -- Query 1: */ 
+SELECT a.EmailAddress
+, a.SubscriberKey
+, a.Status
+FROM DataExtension a
+WHERE _customObjectKey % 1 = 1

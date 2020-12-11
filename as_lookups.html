@@ -1,0 +1,22 @@
+%%[ /* AMPscript Lookups */
+
+/* Lookup Rows */
+set @lookupVariable = 'rando'
+set @lookupRows = LookupRows('DataExtension','Field',@lookupVariable)
+set @countRows = RowCount(@lookupRows)
+if @countRows > 0 then
+  set @row = Row(@lookupRows,1)
+  set @field = Field(@row,'Field')
+endif
+
+
+/* Lookup Ordered Rows -- returns 5 ordered rows */
+set @lookupVariable = 'rando'
+set @lookupOrderedRows = LookupOrderedRows('DataExtension',5,'Field asc','variable',@lookupVariable)
+set @countOrderedRows = RowCount(@lookupOrderedRows)
+if @countOrderedRows > 0 then
+  set @row = Row(@lookupOrderedRows,1)
+  set @field = Field(@row,'Field')
+endif
+
+]%%
