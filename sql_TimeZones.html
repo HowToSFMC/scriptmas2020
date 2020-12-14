@@ -1,0 +1,7 @@
+/* Get around some timezone challenges with the AT TIME ZONE 'function' within your SQL Queries */
+select
+eventdate AT TIME ZONE 'Central America Standard Time' AT TIME ZONE 'UTC' AS 'eventdate'
+,SubscriberKey
+,jobID
+from
+_Sent
