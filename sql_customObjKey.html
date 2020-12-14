@@ -8,16 +8,28 @@ The below example breaks the DE in two.
 First half of the DE -- Query 1: 
 */ 
 
-SELECT a.EmailAddress
-, a.SubscriberKey
-, a.Status
-FROM DataExtension a
-WHERE _customObjectKey % 1 = 0
+SELECT 
+	a.EmailAddress,
+ 	a.SubscriberKey,
+ 	a.Status
+
+FROM 
+	DataExtension a
+
+WHERE
+	_customObjectKey % 1 = 0
 
 
 /* Second half of the DE -- Query 1: */ 
-SELECT a.EmailAddress
-, a.SubscriberKey
-, a.Status
-FROM DataExtension a
-WHERE _customObjectKey % 1 = 1
+SELECT 
+	a.EmailAddress,
+	a.SubscriberKey,
+	a.Status
+
+FROM 
+	DataExtension a
+WHERE 
+	_customObjectKey % 1 = 1
+
+
+	

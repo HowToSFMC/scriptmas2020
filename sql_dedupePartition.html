@@ -1,14 +1,20 @@
-/* Ever struggled to Dedupe on a single or multiple attributes?
+/* SQL eedupe using partition window and 
+targeting first row match found */ 
 
-Try using a partitioning window in your SQL Query and you can choose 
-not just what you want to dedupe your data on, but what priority you
-wish to dedupe against. Want to pick the first SubscriberKey that for
-an email address and a status from _Subscribers, try this */
+SELECT x.SubscriberKey
+, x.Email
+FROM (SELECT a.SubscriberKey
+  , a.Email
+  , MAX(a.EventDate) AS lastOpenDate
+  , row_number() Over(
+  		Partition By 
+  			a.SubscriberKey 
 
-select top 1 with ties
-subscriberkey
-,status
-,DateJoined
-from
-_Subscribers
-order by row_number() over (partition by emailaddress, status order by DateJoined asc)
+  			Order By 
+  				a.Email
+  		) row
+  FROM DataExtension a
+  WHERE ISNULL(a.EventDate,'') != ''
+  Group By a.SubscriberKey
+  , a.Email) x 
+WHERE x.row = 1
